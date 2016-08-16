@@ -1,0 +1,39 @@
+---
+- hosts: all
+  sudo: true
+
+  vars:
+    document_root: /vagrant/www
+
+  handlers:
+    - name: reload Apache
+      service: name=apache2 state=reloaded
+
+  tasks:
+
+    - name: update APT cache
+      apt: update_cache=yes cache_valid_time=3600
+
+    - name: install required packages
+      apt: name={{ item }} state=present
+      with_items:
+        - apache2
+        - libapache2-mod-php5
+        - php5-cli
+        - php5-mysql
+        - mysql-server
+
+    - name: configure default virtual host
+      template:
+        src=vhost.conf.j2
+        dest=/etc/apache2/sites-available/000-default.conf
+      notify:
+        - reload Apache
+
+    - name: enable Apache module mod_rewrite
+      file:
+        src=/etc/apache2/mods-available/rewrite.load
+        dest=/etc/apache2/mods-enabled/rewrite.load
+        state=link
+      notify:
+        - reload Apache
