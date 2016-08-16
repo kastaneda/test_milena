@@ -3,6 +3,7 @@
 require_once __DIR__.'/../vendor/autoload.php';
 
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
@@ -39,6 +40,14 @@ $app['login_form'] = $app->factory(function($app) {
         ->getForm();
 });
 
+$app['already_logged'] = $app->factory(function($app) {
+    return function() use ($app) {
+        if ($app['session']->has('logged_user')) {
+            return new Response($app['twig']->render('stub.html.twig'));
+        }
+    };
+});
+
 ////////////////////////////////////////////////////////////////////////////////
 // Index page
 
@@ -53,9 +62,6 @@ $app->get('/', function () use ($app) {
 // Admin login page
 
 $app->match('/admin/login', function (Request $request) use ($app) {
-    if ($app['session']->has('logged_user')) {
-        return $app['twig']->render('already_logged.html.twig');
-    }
     $form = $app['login_form'];
     $form->handleRequest($request);
     if ($form->isValid()) {
@@ -65,10 +71,10 @@ $app->match('/admin/login', function (Request $request) use ($app) {
             ->add('success', 'You are successfully logged in.');
         return $app->redirect($app['url_generator']->generate('index'));
     }
-    return $app['twig']->render('login/admin.html.twig', [
+    return $app['twig']->render('login.html.twig', [
         'form' => $form->createView(),
     ]);
-})->bind('admin_login');
+})->before($app['already_logged'])->bind('admin_login');
 
 ////////////////////////////////////////////////////////////////////////////////
 // Logout page
