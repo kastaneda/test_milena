@@ -34,7 +34,7 @@ $app->register(new Silex\Provider\TranslationServiceProvider());
 
 $app['login_form'] = $app->factory(function($app) {
     return $app['form.factory']->createBuilder(FormType::class)
-        ->add('login', TextType::class)
+        ->add('email', TextType::class)
         ->add('password', PasswordType::class)
         ->getForm();
 });
