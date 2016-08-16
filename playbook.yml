@@ -4,6 +4,9 @@
 
   vars:
     document_root: /vagrant/www
+    db_name: milena
+    db_user: root
+    db_password: ''
 
   handlers:
     - name: reload Apache
@@ -24,43 +27,43 @@
         - mysql-server
         - python-mysqldb
 
-    - name: configure default virtual host
+    - name: configure Apache virtual host
       template:
-        src=vhost.conf.j2
+        src=share/vhost.conf.j2
         dest=/etc/apache2/sites-available/000-default.conf
       notify:
         - reload Apache
 
-    - name: install .my.cnf to vagrant user
-      copy:
-        src=my.cnf
-        dest=/home/vagrant/.my.cnf
+    - name: install MySQL configuration files
+      template:
+        src=share/my.cnf.j2
+        dest={{ item.dir }}/.my.cnf
+        owner={{ item.owner }}
+        group={{ item.owner }}
         mode=0600
-        owner=vagrant
-        group=vagrant
+      with_items:
+        - { dir: /home/vagrant, owner: vagrant }
+        - { dir: /root, owner: root }
 
-    - name: install .my.cnf to root user
-      copy:
-        src=my.cnf
-        dest=/root/.my.cnf
-        mode=0600
-        owner=root
-        group=root
-
-    - name: create database milena
+    - name: create MySQL database '{{ db_name }}'
       mysql_db:
-        name=milena
+        name={{ db_name }}
         state=present
       register: db_created
 
-    - name: import database
+    - name: import MySQL database dump
       mysql_db:
-        name=milena
+        name={{ db_name }}
         state=import
         target=/vagrant/share/authDB.sql
       when: db_created.changed
 
-    - name: build application
+    - name: configure application
+      template:
+        src=share/config.php.j2
+        dest=/vagrant/config.php
+
+    - name: build the application
       command: make
       args:
         chdir: /vagrant

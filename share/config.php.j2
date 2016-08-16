@@ -3,10 +3,10 @@
 return [
     'db.options' => [
         'driver'    => 'pdo_mysql',
-        'dbname'    => 'milena',
+        'dbname'    => '{{ db_name }}',
         'host'      => 'localhost',
-        'user'      => 'root',
-        'password'  => '',
+        'user'      => '{{ db_user }}',
+        'password'  => '{{ db_password }}',
         'charset'   => 'utf8',
         'driverOptions' => [
             1002 => 'SET NAMES utf8',

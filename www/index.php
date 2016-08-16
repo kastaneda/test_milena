@@ -6,16 +6,14 @@ $app = new Silex\Application();
 $app['debug'] = true;
 
 $app->register(new Silex\Provider\DoctrineServiceProvider(),
-    include __DIR__ . '/../config.php');
+    include __DIR__.'/../config.php');
 
 $app->register(new Silex\Provider\TwigServiceProvider(), [
     'twig.path' => __DIR__.'/../views',
 ]);
 
 $app->get('/', function () use ($app) {
-    return $app['twig']->render('index.html.twig', [
-        'debug_data' => $app['db']->fetchAll('SELECT * FROM as_user_types'),
-    ]);
+    return $app['twig']->render('index.html.twig');
 });
 
 $app->run();
