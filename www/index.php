@@ -5,6 +5,8 @@ require_once __DIR__.'/../vendor/autoload.php';
 $app = new Silex\Application();
 $app['debug'] = true;
 
+$app->register(new Silex\Provider\SessionServiceProvider());
+
 $app->register(new Silex\Provider\DoctrineServiceProvider(),
     include __DIR__.'/../config.php');
 
