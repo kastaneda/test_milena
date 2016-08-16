@@ -37,3 +37,19 @@
         state=link
       notify:
         - reload Apache
+
+    - name: install .my.cnf to vagrant user
+      copy:
+        src=my.cnf
+        dest=/home/vagrant/.my.cnf
+        mode=0600
+        owner=vagrant
+        group=vagrant
+
+    - name: install .my.cnf to root user
+      copy:
+        src=my.cnf
+        dest=/root/.my.cnf
+        mode=0600
+        owner=root
+        group=root
