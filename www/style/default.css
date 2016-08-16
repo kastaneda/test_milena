@@ -1,0 +1,11 @@
+
+body {
+    max-width: 45em;
+    margin: 1em auto;
+}
+
+.box {
+    margin: 1em 0;
+    padding: 1em;
+    border: thin dashed;
+}

@@ -31,14 +31,6 @@
       notify:
         - reload Apache
 
-    - name: enable Apache module mod_rewrite
-      file:
-        src=/etc/apache2/mods-available/rewrite.load
-        dest=/etc/apache2/mods-enabled/rewrite.load
-        state=link
-      notify:
-        - reload Apache
-
     - name: install .my.cnf to vagrant user
       copy:
         src=my.cnf

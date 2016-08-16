@@ -5,8 +5,12 @@ require_once __DIR__.'/../vendor/autoload.php';
 $app = new Silex\Application();
 $app['debug'] = true;
 
+$app->register(new Silex\Provider\TwigServiceProvider(), [
+    'twig.path' => __DIR__.'/../views',
+]);
+
 $app->get('/', function () use ($app) {
-    return '<h1>Hello, world!</h1>';
+    return $app['twig']->render('index.html.twig');
 });
 
 $app->run();
