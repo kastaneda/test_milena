@@ -53,3 +53,9 @@
         mode=0600
         owner=root
         group=root
+
+    - name: build application
+      command: make
+      args:
+        chdir: /vagrant
+      sudo: false
