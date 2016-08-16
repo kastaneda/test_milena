@@ -1,0 +1,16 @@
+{% extends "layout.html.twig" %}
+{% form_theme form 'bootstrap_3_horizontal_layout.html.twig' %}
+
+{% block title %}GSM login page{% endblock %}
+
+{% block content %}
+    <h1>GSM login page</h1>
+    
+    <form action="{{ path('admin_login') }}" method="post">
+        {{ form_widget(form) }}
+        <p class="text-right">
+            <input type="submit" name="Login" />
+        </p>
+    </form>
+
+{% endblock %}

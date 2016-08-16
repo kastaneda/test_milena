@@ -1,0 +1,12 @@
+
+{% extends "layout.html.twig" %}
+
+{% block title %}Already logged{% endblock %}
+
+{% block content %}
+    <h1>You are already logged in!</h1>
+    <ul>
+        <li><a href="{{ path('index') }}">Go back to index page</a></li>
+        <li><a href="{{ path('logout') }}">{{ path('logout') }}</a></li>
+    </ul>
+{% endblock %}
