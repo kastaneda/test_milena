@@ -22,6 +22,7 @@
         - php5-cli
         - php5-mysql
         - mysql-server
+        - python-mysqldb
 
     - name: configure default virtual host
       template:
@@ -53,6 +54,19 @@
         mode=0600
         owner=root
         group=root
+
+    - name: create database milena
+      mysql_db:
+        name=milena
+        state=present
+      register: db_created
+
+    - name: import database
+      mysql_db:
+        name=milena
+        state=import
+        target=/vagrant/share/authDB.sql
+      when: db_created.changed
 
     - name: build application
       command: make
