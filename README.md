@@ -54,8 +54,9 @@ You may log in with such credentials:
 [2]: http://127.0.0.1:8080/sales/login
 [3]: http://127.0.0.1:8080/site/login/pid/RVM1G5621DGYHI
 
-How to use hashing
-------------------
+
+How to use real secure hashing
+------------------------------
 
  1. Uncomment first line in `LoginService::checkPassword`.
  2. Run `vagrant ssh` in project folder, then run `mysql` and paste this code:
