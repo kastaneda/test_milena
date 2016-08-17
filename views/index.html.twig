@@ -6,10 +6,8 @@
     <h1>Hello, world!</h1>
 
     <ul>
-        <li><a href="{{ path('admin_login') }}">{{ path('admin_login') }}</a></li>
-        <li><a href="/sales/login">/sales/login</a></li>
-        <li><a href="/site/login/pid/RVM1G5621DGYHI">/site/login/pid/RVM1G5621DGYHI</a></li>
-        <li><a href="/site/login/pid/AVF1G5621DG34D">/site/login/pid/AVF1G5621DG34D</a></li>
-        <li><a href="{{ path('logout') }}">{{ path('logout') }}</a></li>
+{% for link in nav %}
+        <li><a href="{{ link }}">{{ link }}</a></li>
+{% endfor %}
     </ul>
 {% endblock %}
