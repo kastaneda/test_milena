@@ -97,7 +97,7 @@ class LoginService
 
     protected function checkPassword($cleartext, $encrypted, $salt = null)
     {
-        // return password_verify($cleartext, $encrypted);
+        //return password_verify($cleartext, $encrypted);
         return $cleartext === $encrypted; // only for testing!
     }
 }
