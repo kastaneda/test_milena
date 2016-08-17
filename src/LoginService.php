@@ -52,25 +52,45 @@ class LoginService
             }
         }
 
-        if (isset($data['clientAdminHash'])) {
-            // FIXME
-            return false;
-        }
+        // search in 'as_users' table
+        if ($user = $this->getUser($email)) {
+            if ($roles && !in_array($user['user_type'], $roles)) {
+                return false;
+            }
 
-        // 
+            if (isset($data['clientAdminHash'])
+                && $user['user_type'] == UserRoles::CLIENT_ADMIN
+                && $user['hash'] != $data['clientAdminHash']) {
+                return false;
+            }
+
+            if ($this->checkPassword($password, $user['pwd'], $user['salt'])) {
+                return [
+                    'id' => $user['id'],
+                    'table' => 'as_users',
+                    'email' => $email,
+                ];
+            }
+        }
 
         return false;
     }
 
     protected function getUser($email)
     {
-        // FIXME
+        $sql = 'SELECT u.id, ut.user_type, u.pwd, u.salt, c.hash'
+            . ' FROM as_users u'
+            . ' LEFT JOIN as_user_types ut ON u.user_type_id = ut.user_type_id'
+            . ' LEFT JOIN as_clients c ON u.clientId = c.id'
+            . ' WHERE email = ?';
+
+        return $this->db->fetchAssoc($sql, [$email]);
     }
 
     protected function getGsmAdmin($email)
     {
-        $sql = 'SELECT * FROM `users` '
-            . 'WHERE `user_email` = ? AND `user_type_id` = 6';
+        $sql = 'SELECT * FROM `users`'
+            . ' WHERE user_email = ? AND user_type_id = 6';
 
         return $this->db->fetchAssoc($sql, [$email]);
     }
