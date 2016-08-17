@@ -31,7 +31,53 @@ class LoginService
      */
     public function login($data)
     {
-        // return false;
-        return ['id'=>123, 'table'=>'users'];
+        $email = isset($data['email']) ? $data['email'] : false;
+        $password = isset($data['password']) ? $data['password'] : false;
+        $roles = isset($data['roles']) ? $data['roles'] : false;
+
+        if (!$email || !$password) {
+            return false;
+        }
+
+        // search in 'users' table
+        if (!$roles || in_array(UserRoles::GSM_ADMIN, $roles)) {
+            if ($user = $this->getGsmAdmin($email)) {
+                if ($this->checkPassword($password, $user['user_password'])) {
+                    return [
+                        'id' => $user['user_id'],
+                        'table' => 'users',
+                        'email' => $email,
+                    ];
+                }
+            }
+        }
+
+        if (isset($data['clientAdminHash'])) {
+            // FIXME
+            return false;
+        }
+
+        // 
+
+        return false;
+    }
+
+    protected function getUser($email)
+    {
+        // FIXME
+    }
+
+    protected function getGsmAdmin($email)
+    {
+        $sql = 'SELECT * FROM `users` '
+            . 'WHERE `user_email` = ? AND `user_type_id` = 6';
+
+        return $this->db->fetchAssoc($sql, [$email]);
+    }
+
+    protected function checkPassword($cleartext, $encrypted, $salt = null)
+    {
+        // return password_verify($cleartext, $encrypted);
+        return $cleartext === $encrypted; // only for testing!
     }
 }
