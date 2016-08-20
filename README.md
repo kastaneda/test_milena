@@ -30,7 +30,7 @@ Getting started
  1. Install Vagrant, if not installed yet
  2. Run `vagrant up` in project folder
  3. Open http://127.0.0.1:8080/ in your browser
- 
+
 
 Troubleshoting
 --------------
@@ -62,7 +62,7 @@ How to use real secure hashing
  2. Run `vagrant ssh` in project folder, then run `mysql` and paste this code:
 
 ```sql
-UPDATE `as_users` SET pwd = 
+UPDATE `as_users` SET pwd =
 '$2y$10$88xKYwareQRrtvV5ng8kWerrsoCvkFho9Y1HgRjn65BSqr6kMCDYG';
 
 UPDATE `users` SET user_password =
